@@ -127,4 +127,17 @@ loadItems().then(() => {
   console.log("Items loaded:", items);
   startSimulation();
 });
+<select id="crateTierSelect">
+  <option value="Basic Crate">Basic Crate</option>
+  <option value="Advanced Crate">Advanced Crate</option>
+  <option value="Elite Crate">Elite Crate</option>
+</select>
+
+<button id="openCrateButton">Open Crate</button>
+
+<div id="crate" class="crate">
+  <!-- Add crate animation styles here -->
+</div>
+
+<div id="result" style="display:none;"></div>
 
