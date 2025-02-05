@@ -75,15 +75,27 @@ function CrateBox({
     </div>
   );
 }
-// Preloading crateclick sound
-const audioContext = new AudioContext();
-let clickBuffer: AudioBuffer | null = null;
 
+// Creating a single AudioContext for both sounds
+const audioContext = new AudioContext();
+
+// Preloading crate click sound
+let clickBuffer: AudioBuffer | null = null;
 fetch("./crateclick.mp3")
   .then((res) => res.arrayBuffer())
   .then((data) => audioContext.decodeAudioData(data))
   .then((decodedBuffer) => (clickBuffer = decodedBuffer));
 
+// Preloading hover sound
+let hoverBuffer: AudioBuffer | null = null;
+fetch("./forhover.mp3")
+  .then((res) => res.arrayBuffer())
+  .then((data) => audioContext.decodeAudioData(data))
+  .then((decodedBuffer) => (hoverBuffer = decodedBuffer));
+
+let isHoverPlaying = false;
+
+// Function to play crate click sound
 const playClickSound = () => {
   if (!clickBuffer) return;
   const source = audioContext.createBufferSource();
@@ -91,6 +103,28 @@ const playClickSound = () => {
   source.connect(audioContext.destination);
   source.start();
 };
+// Function to play hover sound
+const playHoverSound = () => {
+  if (!hoverBuffer || isHoverPlaying) return;
+  isHoverPlaying = true;
+  const source = audioContext.createBufferSource();
+  source.buffer = hoverBuffer;
+  source.connect(audioContext.destination);
+  source.start();
+  source.onended = () => {
+    isHoverPlaying = false; // Reset flag when the sound ends
+  };
+};
+
+const bgImages = [
+  "./bgs/Sierra-Large.jpg",
+  "./bgs/Xibalba-Large.jpg",
+  "./bgs/Mistle-Large.jpg",
+  "./bgs/Runes-Large.jpg",
+  "./bgs/SandstormBlitz-Large.jpg",
+  "./bgs/Temple-Large.jpg",
+  "./bgs/Tundra-Large.jpg",
+];
 
 function App() {
   const [openingCrate, setOpeningCrate] = useState<string | null>(null);
@@ -98,6 +132,26 @@ function App() {
   const [inventory, setInventory] = useState<Record<string, number>>({});
   const [showInventory, setShowInventory] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [currentBgIndex, setCurrentBgIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+  const handleMouseEnter = () => {
+    if (!isHoverPlaying) {
+      playHoverSound();
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFade(false); // Start fading out
+
+      setTimeout(() => {
+        setCurrentBgIndex((prevIndex) => (prevIndex + 1) % bgImages.length);
+        setFade(true); // Start fading in after the image changes
+      }, 1000); // Duration of fade-out before switching
+    }, 5000); // Change every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const audio = new Audio("./bg_music.mp3");
@@ -173,8 +227,20 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10">
-      <header className="text-center">
+    <div className="min-h-screen text-white flex flex-col items-center py-10">
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url(${bgImages[currentBgIndex]})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          opacity: fade ? 1 : 0, // Smooth fade in and out
+          transition: "opacity 0.8s ease-in-out",
+          filter: "blur(10px) brightness(0.5)",
+        }}
+      ></div>
+      <header className=" relative z-10 text-center">
         <img
           src="https://venge.io/files/assets/182916517/1/Logo.png"
           alt="Venge.io"
@@ -186,13 +252,17 @@ function App() {
         <p className="mt-3 text-gray-400">For All Your Venge Gambling Needs</p>
         <button
           onClick={toggleInventory}
-          className="mt-5 w-48 bg-black hover:bg-gray-700 text-yellow-400 font-bold py-2 px-4 rounded transition-all"
+          onPointerDown={playClickSound}
+          onMouseEnter={handleMouseEnter}
+          className="mt-5 w-48 bg-black opacity-50 hover:bg-gray-700 text-yellow-400 font-bold py-2 px-4 rounded-full transition-all"
         >
           {showInventory ? "Close Inventory" : "View Inventory"}
         </button>
         <button
           onClick={toggleAudio}
-          className="mt-5 w-48 bg-black hover:bg-gray-700 text-yellow-400 font-bold py-2 px-4 rounded transition-all"
+          onPointerDown={playClickSound}
+          onMouseEnter={handleMouseEnter}
+          className="mt-5 w-48 bg-black opacity-50 hover:bg-gray-700 text-yellow-400 font-bold py-2 px-4 rounded-full transition-all"
         >
           {isAudioPlaying ? "Pause Music" : "Play Music"}
         </button>
@@ -201,7 +271,8 @@ function App() {
       {!showInventory ? (
         <div
           onPointerDown={playClickSound}
-          className="container mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center"
+          onMouseEnter={handleMouseEnter}
+          className="container opacity-85 mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center"
         >
           {Object.entries(crateData.crates).map(([level, crate]) => (
             <CrateBox
@@ -216,7 +287,7 @@ function App() {
           ))}
         </div>
       ) : (
-        <div className="container mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
+        <div className="container opacity-85 mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
           {Object.entries(inventory).map(([key, count]) => {
             const [itemName, itemType] = key.split("-");
             const item = Object.values(crateData.items).find(
@@ -231,7 +302,7 @@ function App() {
                       alt={item.name}
                       className="w-48 h-48 object-contain transition-transform duration-300 group-hover:scale-110"
                     />
-                    <div className="absolute top-0 left-0 bg-black text-yellow-400 p-2 rounded-md text-xs font-bold">
+                    <div className="absolute top-0 left-0 text-yellow-400 p-2 rounded-full text-sm font-bold">
                       {count}
                     </div>
                   </div>
@@ -284,6 +355,7 @@ function App() {
             <button
               onClick={() => setSelectedItem(null)}
               onPointerDown={playClickSound}
+              onMouseEnter={handleMouseEnter}
               className="mt-5 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded transition-all"
             >
               Continue Opening
@@ -291,7 +363,7 @@ function App() {
           </div>
         </div>
       )}
-      <div className=" bottom-4 w-full text-center text-gray-500">
+      <div className=" z-10 bottom-4 w-full text-center text-gray-500">
         <p className="text-sm">
           &copy; Made by <span className="text-yellow-400">d0sob</span>
         </p>
