@@ -81,7 +81,28 @@ function App() {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [inventory, setInventory] = useState<Record<string, number>>({});
   const [showInventory, setShowInventory] = useState(false);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [audio] = useState(new Audio("/crateclick.mp3"));
+  const handleClickCrate = () => {
+    audio.play().catch((err) => console.log("Audio play error:", err));
+  };
+  useEffect(() => {
+    const audio = new Audio("/bg_music.mp3");
+    audio.loop = true;
+    audio.volume = 0.2; // Lower the volume
 
+    if (isAudioPlaying) {
+      audio.play().catch((err) => console.log("Audio play error:", err));
+    } else {
+      audio.pause();
+    }
+
+    return () => audio.pause(); // Cleanup the audio when the component unmounts
+  }, [isAudioPlaying]); // Dependency on isAudioPlaying state
+
+  const toggleAudio = () => {
+    setIsAudioPlaying((prevState) => !prevState); // Toggle the audio play/pause
+  };
   // Load inventory from localStorage
   useEffect(() => {
     const savedInventory = localStorage.getItem("inventory");
@@ -156,10 +177,19 @@ function App() {
         >
           {showInventory ? "Close Inventory" : "View Inventory"}
         </button>
+        <button
+          onClick={toggleAudio}
+          className="mt-5 w-48 bg-black hover:bg-gray-700 text-yellow-400 font-bold py-2 px-4 rounded transition-all"
+        >
+          {isAudioPlaying ? "Pause Music" : "Play Music"}
+        </button>
       </header>
 
       {!showInventory ? (
-        <div className="container mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
+        <div
+          onClick={handleClickCrate}
+          className="container mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center"
+        >
           {Object.entries(crateData.crates).map(([level, crate]) => (
             <CrateBox
               key={level}

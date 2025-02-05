@@ -6547,11 +6547,16 @@
       }
     },
     "level3": {
-      "name": "OG Chest",
+      "name": "Exclusive Chest",
       "image": "https://media.discordapp.net/attachments/764130393892585493/1336701245922213898/upscalemedia-transformed.png?ex=67a4c38b&is=67a3720b&hm=00163c15755844537b3eed4a8296b02dd7b625b683b6afa2469f1f6fb6fa3012&=&format=webp&quality=lossless&width=750&height=591",
       "rarityDrops": {
-        "Legendary": 80,
-        "Common": 20
+        "Mythical-Halloween": 14,
+        "Uncommon-Halloween": 14,
+        "Rare-Halloween": 14,
+        "Legendary-Halloween": 14,
+        "Anniversary": 14,
+        "Xmas-2020": 14,
+        "Xmas": 16
       }
     }
   }
