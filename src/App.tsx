@@ -272,7 +272,9 @@ function App() {
             <div className="mt-3">
               <span
                 className="inline-block px-3 py-1 rounded-full text-sm"
-                style={{ backgroundColor: `#${selectedItem.color}` }}
+                style={{
+                  backgroundColor: `#${crateData.colors[selectedItem.rarity]}`,
+                }}
               >
                 {selectedItem.rarity}
               </span>
