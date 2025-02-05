@@ -82,12 +82,12 @@ function App() {
   const [inventory, setInventory] = useState<Record<string, number>>({});
   const [showInventory, setShowInventory] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
-  const [audio] = useState(new Audio("/crateclick.mp3"));
+  const [audio] = useState(new Audio("./crateclick.mp3"));
   const handleClickCrate = () => {
     audio.play().catch((err) => console.log("Audio play error:", err));
   };
   useEffect(() => {
-    const audio = new Audio("/bg_music.mp3");
+    const audio = new Audio("./bg_music.mp3");
     audio.loop = true;
     audio.volume = 0.2; // Lower the volume
 
@@ -267,7 +267,10 @@ function App() {
             <h3 className="text-2xl font-bold mt-3">{selectedItem.name}</h3>
             <p className="text-gray-400">Creator: {selectedItem.owner}</p>
             <button
-              onClick={() => setSelectedItem(null)}
+              onClick={() => {
+                setSelectedItem(null);
+                handleClickCrate();
+              }}
               className="mt-5 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded transition-all"
             >
               Continue Opening
