@@ -165,7 +165,7 @@ function App() {
 
       setSelectedItem(selectedItem);
       setOpeningCrate(null);
-    }, 1500);
+    }, 500);
   }
 
   function toggleInventory() {
