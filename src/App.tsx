@@ -47,7 +47,7 @@ function CrateBox({
         <img
           src={image}
           alt={name}
-          className="w-48 h-48 object-contain transition-transform duration-300 group-hover:scale-110"
+          className="w-64 h-64 object-contain transition-transform duration-300 group-hover:scale-110"
         />
         {itemCount > 0 && (
           <div className="absolute top-0 right-0 bg-yellow-500 text-black p-2 rounded-full text-xs font-bold">
@@ -209,7 +209,7 @@ function App() {
             <img
               src={crateData.crates[openingCrate].image}
               alt="Opening Crate"
-              className="w-48 h-48 mx-auto"
+              className="w-128 h-128 mx-auto"
             />
             <p className="text-yellow-400 mt-3 text-lg font-semibold">
               Opening...
