@@ -20,8 +20,8 @@ const loadSound = async (url: string): Promise<AudioBuffer | null> => {
 // Initialize sounds once
 export const useSound = () => {
   useEffect(() => {
-    loadSound("./crateclick.mp3").then((buffer) => (clickBuffer = buffer));
-    loadSound("./forhover.mp3").then((buffer) => (hoverBuffer = buffer));
+    loadSound("./audio/crateclick.mp3").then((buffer) => (clickBuffer = buffer));
+    loadSound("./audio/forhover.mp3").then((buffer) => (hoverBuffer = buffer));
   }, []);
 
   const playClickSound = () => {
@@ -48,7 +48,7 @@ export const useSound = () => {
 // Function to handle background music
 export const useBackgroundMusic = (isAudioPlaying: boolean) => {
   useEffect(() => {
-    const audio = new Audio("./bg_music.mp3");
+    const audio = new Audio("./audio/bg_music.mp3");
     audio.loop = true;
     audio.volume = 0.2;
 
