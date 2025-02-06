@@ -1,6 +1,6 @@
 import React from "react";
 import crateData from "../data/items.json";
-import { useSound } from "../hooks/sounds";
+import { useSound } from "../hooks/useSounds";
 
 interface ModalProps {
   openingCrate: string | null;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSound } from "../hooks/sounds"; // Import sound hook
+import { useSound } from "../hooks/useSounds"; // Import sound hook
 
 interface CrateProps {
   level: string;

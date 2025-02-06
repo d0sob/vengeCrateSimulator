@@ -1,40 +1,40 @@
 import React, { useState, useEffect } from "react";
 import CrateBox from "./components/CrateBox";
 import Inventory from "./components/Inventory";
-import Modal from "./components/Modal";
+import Modal from "./components/ChestModal";
 import Header from "./components/Header";
-import Background from "./components/Background"; // Import the new Background component
+import Background from "./components/Background";
 import crateData from "./data/items.json";
-import { useBackgroundMusic } from "./hooks/sounds";
+import { useBackgroundMusic } from "./hooks/useSounds";
 import { useCrateOpening } from "./hooks/useCrateOpeningLogic";
+import { useInventoryStorage } from "./hooks/useInventoryStorage";
 
 const App: React.FC = () => {
-  const [inventory, setInventory] = useState<Record<string, number>>({});
   const [showInventory, setShowInventory] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
-  // Load inventory from localStorage
-  useEffect(() => {
-    const savedInventory = localStorage.getItem("inventory");
-    if (savedInventory) {
-      setInventory(JSON.parse(savedInventory));
-    }
-  }, []);
+  const {
+    selectedItem,
+    openingCrate,
+    openCrate,
+    setSelectedItem,
+    inventory,
+    setInventory,
+  } = useCrateOpening();
 
-  // Save inventory to localStorage
+  const { inventory: storedInventory, setInventory: setStoredInventory } =
+    useInventoryStorage();
+
   useEffect(() => {
-    if (Object.keys(inventory).length > 0) {
-      localStorage.setItem("inventory", JSON.stringify(inventory));
+    if (Object.keys(storedInventory).length > 0) {
+      setInventory(storedInventory); // Set state if loaded from localStorage
     }
-  }, [inventory]);
+  }, [storedInventory, setInventory]);
 
   //Background music Implementation
   useBackgroundMusic(isAudioPlaying);
   const toggleAudio = () => setIsAudioPlaying((prev) => !prev);
   const toggleInventory = () => setShowInventory((prev) => !prev);
-
-  const { selectedItem, openingCrate, openCrate, setSelectedItem } =
-    useCrateOpening();
 
   return (
     <div className="min-h-screen text-white flex flex-col items-center py-10">

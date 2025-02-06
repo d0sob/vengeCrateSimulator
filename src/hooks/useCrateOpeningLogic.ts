@@ -5,6 +5,7 @@ import crateData from "../data/items.json";
 export const useCrateOpening = () => {
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [openingCrate, setOpeningCrate] = useState<string | null>(null);
+  const [inventory, setInventory] = useState<Record<string, number>>({});
 
   const openCrate = (crateLevel: string, setInventory: React.Dispatch<React.SetStateAction<Record<string, number>>>) => {
     const crate = crateData.crates[crateLevel];
@@ -44,5 +45,5 @@ export const useCrateOpening = () => {
     }, 500);
   };
 
-  return { selectedItem, openingCrate, openCrate, setSelectedItem };
+  return { selectedItem, openingCrate, openCrate, setSelectedItem, inventory, setInventory};
 };

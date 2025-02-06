@@ -1,5 +1,5 @@
 import React from "react";
-import { useSound } from "../hooks/sounds";
+import { useSound } from "../hooks/useSounds";
 
 interface HeaderProps {
   toggleInventory: () => void;
