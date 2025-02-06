@@ -11,7 +11,6 @@ interface CrateProps {
 }
 
 const CrateBox: React.FC<CrateProps> = ({
-  level,
   name,
   onOpen,
   image,

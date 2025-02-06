@@ -1,11 +1,12 @@
 import React from "react";
 import crateData from "../data/items.json";
 import { useSound } from "../hooks/useSounds";
+import { CrateLevel, Item } from "../types/Item";
 
 interface ModalProps {
   openingCrate: string | null;
-  selectedItem: any;
-  setSelectedItem: (item: any) => void;
+  selectedItem: Item | null;
+  setSelectedItem: (item: Item | null) => void;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -20,7 +21,7 @@ const Modal: React.FC<ModalProps> = ({
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
           <div className="text-center animate-pulse">
             <img
-              src={crateData.crates[openingCrate].image}
+              src={crateData.crates[openingCrate as CrateLevel].image}
               alt="Opening Crate"
               className="w-128 h-128 mx-auto"
             />
@@ -43,7 +44,11 @@ const Modal: React.FC<ModalProps> = ({
               <span
                 className="inline-block px-3 py-1 rounded-full text-sm"
                 style={{
-                  backgroundColor: `#${crateData.colors[selectedItem.rarity]}`, // Use color from crateData
+                  backgroundColor: `#${
+                    crateData.colors[
+                      selectedItem.rarity as keyof typeof crateData.colors
+                    ]
+                  }`, // Use color from crateData
                 }}
               >
                 {selectedItem.rarity} {/* Display the rarity here */}

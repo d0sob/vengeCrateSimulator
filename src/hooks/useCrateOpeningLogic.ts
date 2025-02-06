@@ -1,9 +1,11 @@
 import { useState } from "react";
 import crateData from "../data/items.json";
+import { Item, CrateLevel } from "../types/Item";
+
 
 // Custom hook for handling crate opening logic
 export const useCrateOpening = () => {
-  const [selectedItem, setSelectedItem] = useState<any | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [openingCrate, setOpeningCrate] = useState<string | null>(null);
   const [inventory, setInventory] = useState<Record<string, number>>({});
 
@@ -12,7 +14,7 @@ const openCrate = (
   setInventory: React.Dispatch<React.SetStateAction<Record<string, number>>>,
   setStoredInventory: React.Dispatch<React.SetStateAction<Record<string, number>>>
 ) => {
-  const crate = crateData.crates[crateLevel];
+  const crate = crateData.crates[crateLevel as CrateLevel];
   if (!crate) return;
 
   setOpeningCrate(crateLevel);
