@@ -60,7 +60,7 @@ const App: React.FC = () => {
               image={crate.image}
               rarityDrops={crate.rarityDrops}
               itemCount={inventory[crate.name] || 0}
-              onOpen={() => openCrate(level, setInventory)}
+              onOpen={() => openCrate(level, setInventory, setStoredInventory)}
             />
           ))}
         </div>
