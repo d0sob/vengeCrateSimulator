@@ -21,8 +21,9 @@ const CrateBox: React.FC<CrateProps> = ({
   const { playClickSound, playHoverSound } = useSound(); // Use sounds
 
   return (
+    // Crate Boxes container
     <div
-      className="relative group cursor-pointer transform transition-all duration-300 hover:scale-105 w-full max-w-xs"
+      className="relative flex justify-between cursor-pointer transform transition-all duration-300 hover:scale-105 w-full max-w-xs"
       onClick={() => {
         playClickSound();
         onOpen();
@@ -33,25 +34,30 @@ const CrateBox: React.FC<CrateProps> = ({
       }}
       onMouseLeave={() => setShowDropRates(false)}
     >
-      <div className="w-full bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg shadow-xl flex items-center justify-center border-2 border-gray-700 group-hover:border-yellow-500">
+      {/* Crate Box container */}
+      <div className="w-full bg-gradient-to-br  from-gray-700 to-gray-900 rounded-lg shadow-xl flex justify-center items-center border-2 border-gray-700 group-hover:border-yellow-500">
+        {/* Crate Image */}
         <img
           src={image}
           alt={name}
-          className="w-64 h-64 object-contain transition-transform duration-300 group-hover:scale-110"
+          className="w-64 h-64 object-contain transition-transform  "
         />
         {itemCount > 0 && (
+          // Item Count
           <div className="absolute top-0 right-0 bg-yellow-500 text-black p-2 rounded-full text-xs font-bold">
             {itemCount}
           </div>
         )}
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-75 text-white p-2 rounded-b-lg text-center">
+      {/* Crate Details */}
+      <div className="absolute bottom-0 left-0 w-full bg-gray-400 bg-opacity-20 text-white p-2 rounded-b-lg text-center">
         <h3 className="text-lg font-bold w-full">{name}</h3>
       </div>
 
       {showDropRates && (
-        <div className="absolute top-0 left-0 w-full bg-black bg-opacity-80 text-white p-3 rounded-lg shadow-lg text-sm">
+        // Drop Rates
+        <div className="absolute top-0 font-extrabold left-0 w-full text-center text-white p-3 rounded-lg bg-gray-700 text-sm">
           <h4 className="font-semibold text-yellow-400">Drop Rates:</h4>
           <ul>
             {Object.entries(rarityDrops).map(([rarity, chance]) => (

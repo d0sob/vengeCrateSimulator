@@ -51,7 +51,7 @@ const App: React.FC = () => {
 
       {/* Crate List or Inventory */}
       {!showInventory ? (
-        <div className="container opacity-85 mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
+        <div className="container opacity-85 mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-items-center gap-20">
           {Object.entries(crateData.crates).map(([level, crate]) => (
             <CrateBox
               key={level}

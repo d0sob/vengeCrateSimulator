@@ -18,6 +18,7 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <>
       {openingCrate && (
+        //Container for opening crate animation
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
           <div className="text-center animate-pulse">
             <img
@@ -33,14 +34,17 @@ const Modal: React.FC<ModalProps> = ({
       )}
 
       {selectedItem && !openingCrate && (
+        //Container for displaying the item
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
           <div className="bg-gray-800 p-6 rounded-lg max-w-md w-full text-center">
+            {/* Display the item image*/}
             <img
               src={selectedItem.thumbnail}
               alt={selectedItem.name}
               className="w-full h-full object-cover rounded-lg"
             />
             <div className="mt-3">
+              {/* Display the rarity */}
               <span
                 className="inline-block px-3 py-1 rounded-full text-sm"
                 style={{
@@ -51,11 +55,13 @@ const Modal: React.FC<ModalProps> = ({
                   }`, // Use color from crateData
                 }}
               >
-                {selectedItem.rarity} {/* Display the rarity here */}
+                {selectedItem.rarity}
               </span>
             </div>
+            {/* Display the item name and creator */}
             <h3 className="text-2xl font-bold mt-3">{selectedItem.name}</h3>
             <p className="text-gray-400">Creator: {selectedItem.owner}</p>
+            {/* Continue */}
             <button
               onClick={() => setSelectedItem(null)}
               onPointerDown={playClickSound}

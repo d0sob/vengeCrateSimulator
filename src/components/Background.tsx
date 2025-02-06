@@ -21,20 +21,20 @@ const Background: React.FC = () => {
       setTimeout(() => {
         setCurrentBgIndex((prevIndex) => (prevIndex + 1) % bgImages.length);
         setFade(true); // Start fading in after the image changes
-      }, 1000); // Duration of fade-out before switching
-    }, 5000); // Change every 5 seconds
+      }, 500); // Duration of fade-out before switching
+    }, 1800); // Change every 5 seconds
 
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div
-      className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+      className="fixed inset-0 bg-cover bg-center bg-no-repeat h-screen "
       style={{
         backgroundImage: `url(${bgImages[currentBgIndex]})`,
         opacity: fade ? 1 : 0,
         transition: "opacity 0.8s ease-in-out",
-        filter: "blur(10px) brightness(0.5)",
+        filter: "blur(10px) brightness(0.4)",
       }}
     ></div>
   );
