@@ -44,3 +44,20 @@ export const useSound = () => {
 
   return { playClickSound, playHoverSound };
 };
+
+// Function to handle background music
+export const useBackgroundMusic = (isAudioPlaying: boolean) => {
+  useEffect(() => {
+    const audio = new Audio("./bg_music.mp3");
+    audio.loop = true;
+    audio.volume = 0.2;
+
+    if (isAudioPlaying) {
+      audio.play().catch((err) => console.log("Audio play error:", err));
+    } else {
+      audio.pause();
+    }
+
+    return () => audio.pause(); // Cleanup when component unmounts
+  }, [isAudioPlaying]); // Trigger on isAudioPlaying change
+};

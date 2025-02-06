@@ -5,10 +5,10 @@ import Modal from "./components/Modal";
 import Header from "./components/Header";
 import Background from "./components/Background"; // Import the new Background component
 import crateData from "./data/items.json";
+import { useBackgroundMusic } from "./hooks/sounds";
+import { useCrateOpening } from "./hooks/useCrateOpeningLogic";
 
 const App: React.FC = () => {
-  const [openingCrate, setOpeningCrate] = useState<string | null>(null);
-  const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [inventory, setInventory] = useState<Record<string, number>>({});
   const [showInventory, setShowInventory] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
@@ -28,62 +28,13 @@ const App: React.FC = () => {
     }
   }, [inventory]);
 
-  // Handle music toggle
-  useEffect(() => {
-    const audio = new Audio("./bg_music.mp3");
-    audio.loop = true;
-    audio.volume = 0.2;
-
-    if (isAudioPlaying) {
-      audio.play().catch((err) => console.log("Audio play error:", err));
-    } else {
-      audio.pause();
-    }
-
-    return () => audio.pause();
-  }, [isAudioPlaying]);
-
+  //Background music Implementation
+  useBackgroundMusic(isAudioPlaying);
   const toggleAudio = () => setIsAudioPlaying((prev) => !prev);
   const toggleInventory = () => setShowInventory((prev) => !prev);
 
-  // Handle crate opening logic
-  const openCrate = (crateLevel: string) => {
-    const crate = crateData.crates[crateLevel];
-    if (!crate) return;
-
-    setOpeningCrate(crateLevel);
-
-    setTimeout(() => {
-      const rarityPool: string[] = [];
-      Object.entries(crate.rarityDrops).forEach(([rarity, chance]) => {
-        for (let i = 0; i < chance; i++) {
-          rarityPool.push(rarity);
-        }
-      });
-
-      const selectedRarity =
-        rarityPool[Math.floor(Math.random() * rarityPool.length)];
-      const filteredItems = Object.values(crateData.items).filter(
-        (item) => item.rarity === selectedRarity
-      );
-
-      const selectedItem =
-        filteredItems.length > 0
-          ? filteredItems[Math.floor(Math.random() * filteredItems.length)]
-          : null;
-
-      if (selectedItem) {
-        const key = `${selectedItem.name}-${selectedItem.type}`;
-        setInventory((prev) => ({
-          ...prev,
-          [key]: (prev[key] || 0) + 1,
-        }));
-      }
-
-      setSelectedItem(selectedItem);
-      setOpeningCrate(null);
-    }, 500);
-  };
+  const { selectedItem, openingCrate, openCrate, setSelectedItem } =
+    useCrateOpening();
 
   return (
     <div className="min-h-screen text-white flex flex-col items-center py-10">
@@ -109,7 +60,7 @@ const App: React.FC = () => {
               image={crate.image}
               rarityDrops={crate.rarityDrops}
               itemCount={inventory[crate.name] || 0}
-              onOpen={() => openCrate(level)}
+              onOpen={() => openCrate(level, setInventory)}
             />
           ))}
         </div>
